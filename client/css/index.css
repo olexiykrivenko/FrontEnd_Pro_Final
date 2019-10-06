@@ -1,0 +1,283 @@
+.tasks{
+    width: 1000px;
+    height: 800px;
+    margin: 10px auto 0;
+    background: url("../img/map_bg.png") center/cover;
+    position: relative;
+    overflow: hidden;
+}
+
+.new_task{
+    position: absolute;
+    left: 20px;
+    top: 10px;
+    width: 220px;
+    font: 100 15px sans-serif;
+    color: blue;
+    padding: 10px 0px;
+    background-color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.taskBlock{
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    position: absolute;
+    left: 20px;
+    top: 60px;
+    list-style-type: none;
+    height: 750px;
+    overflow: auto;
+}
+
+.taskBlockItem{
+    position: relative;
+    width: 100%;
+    background: white;
+    margin: 10px 0px;
+    padding: 10px;
+    transition: 1s;
+}
+
+.taskBlockItem > span{
+    display: block;
+    color: grey;
+    font-family: sans-serif;
+    margin-bottom: 10px;
+}
+
+.taskBlockItem > p{
+    font-family: sans-serif;
+    font-weight: 700;
+    margin-bottom: 10px;
+    word-wrap: break-word;
+}
+
+.delete, .edit{
+    padding: 10px;
+    border: 1px solid blue;
+    border-radius: 5px;
+    cursor: pointer;
+    margin: 0px 5px;
+}
+
+.edit{
+    background: blue;
+    color: white;
+    font-weight: 700;
+}
+
+
+.edit_modal{
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.show_edit_modal{
+    opacity: 1;
+    visibility: visible;
+}
+
+.edit_modal_content{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: white;
+    padding: 20px;
+    width: 300px;
+    height: 150px;
+    border-radius: 2px solid black;
+    background: lightgray;
+}
+
+.edit_modal_content > input{
+    display: block;
+    width: 100%;
+    border: 2px solid black;
+    border-radius: 10px;
+    height: 40px;
+    padding: 3px;
+    margin-bottom: 30px;
+    background: white;
+}
+
+.edit_modal_content > button{
+    display: block;
+    margin: 0 auto;
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 10px 20px;
+    color: white;
+    background: blue;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+
+.dashboard{
+    height: 100%;
+    width: 350px;
+    background: white;
+    position: absolute;
+    right: -350px;
+    transition: 1s;
+}
+
+.location, .service_type, .service_type_tasks, .task_description{
+    padding: 15px;
+}
+
+.location > h4{
+    font-size: 20px;
+    color: darkgrey;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.service_type > h4{
+    font-size: 20px;
+    color: darkgrey;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.service_type_tasks > h4{
+    font-size: 20px;
+    color: darkgrey;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.postNewTask{
+    background: lightgrey;
+    padding: 15px;
+}
+
+.postNewTask > h4{
+    font-size: 20px;
+    color: darkgrey;
+    letter-spacing: 2px;
+    margin-bottom: 10px;
+}
+
+.postNewTask > p{
+    word-wrap: break-word;
+}
+
+.postNewTask > button{
+    font-size: 15px;
+    padding: 5px 10px;
+    margin-top: 10px;
+    background: lightblue;
+    color: white;
+    font-family: 'Courier New', Courier, monospace;
+    border: none;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0,0,200, 0.5);
+    cursor: pointer;
+}
+
+
+.task_text > p:first-child{
+    font-family: sans-serif;
+    font-size: 15px;
+}
+
+.task_text > p:last-child{
+    font-family: sans-serif;
+    font-size: 10px;
+}
+
+
+
+.save{
+    padding: 10px;
+    border: 1px solid blue;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.service_type > ul{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    text-align: center;
+}
+
+.service_type > ul > li{
+    width: 100%;
+    max-width: 45px;
+    padding: 2px;
+    cursor: pointer;
+}
+
+.service_type > ul > li > span{
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+}
+
+.service_selected{
+    border: 1px solid blue;
+    border-radius: 50%;
+}
+
+.service_type > ul > li:nth-child(1) > span{
+    background: url("../img/electric.svg") no-repeat center/50%;
+}
+
+.service_type > ul > li:nth-child(2) > span{
+    background: url("../img/plumber.svg") no-repeat center/50%;
+}
+
+.service_type > ul > li:nth-child(3) > span{
+    background: url("../img/gardener.svg") no-repeat center/50%;
+}
+
+.service_type > ul > li:nth-child(4) > span{
+    background: url("../img/housekeeper.svg") no-repeat center/50%;
+}
+
+.service_type > ul > li:nth-child(5) > span{
+    background: url("../img/cook.svg") no-repeat center/50%;
+}
+
+.service_type > ul > li > p{
+    font-family: sans-serif;
+    font-size: 11px;
+    text-align: center;
+}
+
+.service_type_tasks > ul{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.service_type_tasks > ul > li{
+    padding: 10px;
+    font-size: 10px;
+    font-family: sans-serif;
+    margin: 5px;
+    cursor: pointer;
+}
+
+.service_type_task_active{
+    border: 1px solid blue;
+    border-radius: 15px;
+}
+
+.task_description > textarea{
+    border: 1px solid lightblue;
+}

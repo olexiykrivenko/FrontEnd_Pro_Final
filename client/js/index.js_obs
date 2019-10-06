@@ -1,0 +1,271 @@
+//new task button
+let newTask = document.body.querySelector(".new_task");
+
+//create task button
+let createTask = document.body.querySelector(".newTask > button");
+
+//created tasks list block
+let taskBlock = document.body.querySelector(".taskBlock");
+
+//right slide panel
+let slidePanel = document.body.querySelector(".dashboard");
+
+//service type block
+let serviceTypeBlock = document.body.querySelector(".service_type > ul");
+
+//service type tasks block
+let serviceTypeTasksBlock = document.body.querySelector(".service_type_tasks");
+
+//service type task free text description
+let taskDesc = document.body.querySelector(".task_description > textarea");
+
+//task text
+let taskText = document.body.querySelector(".newTask > .task_text");
+
+//task data object
+let taskTextData = {};
+
+//task list
+let taskList = [];
+
+
+
+
+
+    //Events
+
+    //#1 create new task event
+newTask.addEventListener("click", function(){
+    serviceTypeTasksBlock.innerHTML = "";
+    taskDesc.value = "";
+    taskText.innerHTML = "";
+    slidePanel.style.right = "0px";
+    delete taskTextData.service;
+    delete taskTextData.task;
+    delete taskTextData.taskDescr;
+    delete taskTextData.date;
+})
+
+
+    //#2 select service type and show service type tasks
+for(let service of serviceTypeBlock.children){
+    service.addEventListener("click", function(event){
+        showServiceTypeTasks(event);
+    });
+}
+
+    //#3 select service type task
+serviceTypeTasksBlock.addEventListener("click", function(event){
+    for(let child of serviceTypeTasksBlock.children){
+        child.className="";
+    }
+        
+    event.target.classList.add("service_type_task_active");
+    taskTextData.task = event.target.innerText;
+    generateTaskText(taskTextData);
+})
+
+    //#4 add task description
+taskDesc.addEventListener("input", function(event){
+    taskTextData.taskDescr = event.currentTarget.value;
+    generateTaskText(taskTextData);
+})
+
+
+    //#5 create new task button pressed
+
+createTask.addEventListener("click", function(){
+    let taskBlockItem = document.createElement("li");
+    taskBlockItem.classList.add("taskBlockItem");
+
+    let taskBlockItemDate = document.createElement("span");
+    taskTextData.date = new Date();
+    taskBlockItemDate.innerText = taskTextData.date;
+    taskBlockItem.append(taskBlockItemDate);
+    
+    let taskBlockItemText = document.createElement("p");
+    taskBlockItemText.innerText = `I need ${taskTextData.service} to ${taskTextData.task}, ${taskTextData.taskDescr}`;
+    taskBlockItem.append(taskBlockItemText);
+
+    let deleteButton = document.createElement("button");
+    deleteButton.classList.add("delete");
+    deleteButton.innerText = "DELETE";
+    
+    deleteButton.addEventListener("click", function(){
+        let xhttp = new XMLHttpRequest();
+        let host = "http://localhost:4321/tasks/" + taskBlockItemDate.innerText;
+        xhttp.open("DELETE", host, true);
+        xhttp.send();
+
+        xhttp.addEventListener("readystatechange", function(){
+            if(xhttp.status === 200 && xhttp.readyState === 4){
+                console.log(xhttp.responseText);
+            } else {
+                console.log(`Something wrong! Status: ${xhttp.status}, State: ${xhttp.readyState}`);
+            }
+        })
+
+        taskList.forEach((task, index) => {
+            if(taskBlockItem === task){
+                taskList.splice(index, 1);
+                task.remove();
+            }
+        })
+    })
+
+    taskBlockItem.append(deleteButton);
+
+    let editButton = document.createElement("button");
+    editButton.classList.add("edit");
+    editButton.innerText = "EDIT";
+    taskBlockItem.append(editButton);
+
+    taskList.push(taskBlockItem);
+    for(let task of taskList){
+        taskBlock.prepend(task);
+    }
+
+    slidePanel.style.right = "-350px";
+
+    let objToServer = {
+        id: taskBlockItemDate.innerText,
+        service: taskTextData.service,
+        task: taskTextData.task,
+        taskDescr: taskTextData.taskDescr,
+        taskText: taskBlockItemText.innerText
+    }
+
+    let json = JSON.stringify(objToServer);
+    console.log(json);
+
+    let xhttp = new XMLHttpRequest();
+    xhttp.open("POST", "http://localhost:4321/tasks", true);
+    xhttp.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+    xhttp.send(json);
+
+    xhttp.addEventListener("readystatechange", function(){
+        if(xhttp.status === 200 && xhttp.readyState === 4){
+            console.log(xhttp.responseText);
+        } else {
+            console.log(`Something wrong! Status: ${xhttp.status}, State: ${xhttp.readyState}`);
+        }
+    })
+})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function showServiceTypeTasks(event){
+    let selectedService = event.currentTarget.querySelector("p").innerText;
+    taskTextData.service = selectedService;
+    generateTaskText(taskTextData);
+
+    switch(selectedService){
+        case "Electrician":
+            addElectricianServices();
+            break;
+        case "Plumber":
+            addPlumberServices();
+            break;
+        case "Gardener":
+            addGardenerServices();
+            break;
+        case "Housekeeper":
+            addHousekeeperServices();
+            break;
+        case "Cook":
+            addCookServices();
+            break;
+    }
+}
+
+function generateTaskText(taskTextData){
+    taskText.innerHTML = "";
+    let p = document.createElement("p");
+    p.innerText = `I need ${taskTextData.service} to ${taskTextData.task}, ${taskTextData.taskDescr}`;
+    taskText.append(p);
+}
+
+function addPlumberServices(){
+    serviceTypeTasksBlock.innerHTML = "";
+    let serviceTasks = ["Unblock a toilet",
+                        "Unblock a sink", 
+                        "Fix a water link",
+                        "Install a sink",
+                        "Install a shower",
+                        "Install a toilet"];
+    serviceTasks.forEach(service => {
+        let span = document.createElement("span");
+        span.innerText = service;
+        serviceTypeTasksBlock.append(span);
+    })
+}
+
+function addElectricianServices(){
+    serviceTypeTasksBlock.innerHTML = "";
+    let serviceTasks = ["Change wires",
+                        "Insert light-bulb", 
+                        "Fix Television device",
+                        "Install ceiling lamp",
+                        "Make wires around the apartment"];
+    serviceTasks.forEach(service => {
+        let span = document.createElement("span");
+        span.innerText = service;
+        serviceTypeTasksBlock.append(span);
+    })
+}
+
+function addGardenerServices(){
+    serviceTypeTasksBlock.innerHTML = "";
+    let serviceTasks = ["Cut trees",
+                        "Make Grass", 
+                        "Work with trees",
+                        "Clean the ourdoor in autumn",
+                        "Keep gardener house clean"];
+    serviceTasks.forEach(service => {
+        let span = document.createElement("span");
+        span.innerText = service;
+        serviceTypeTasksBlock.append(span);
+    })
+}
+
+function addHousekeeperServices(){
+    serviceTypeTasksBlock.innerHTML = "";
+    let serviceTasks = ["Clean apartment",
+                        "Wash dishes", 
+                        "Wash clothes",
+                        "Make dinner",
+                        "Clean the outdoor"];
+    serviceTasks.forEach(service => {
+        let span = document.createElement("span");
+        span.innerText = service;
+        serviceTypeTasksBlock.append(span);
+    })
+}
+
+function addCookServices(){
+    serviceTypeTasksBlock.innerHTML = "";
+    let serviceTasks = ["Deliver food",
+                        "Prepare food", 
+                        "Teach how to cook",
+                        "Make birthday cake",
+                        "Prepare grill"];
+    serviceTasks.forEach(service => {
+        let span = document.createElement("span");
+        span.innerText = service;
+        serviceTypeTasksBlock.append(span);
+    })
+}
